@@ -36,11 +36,15 @@ public class HomeActivity extends AppCompatActivity {
         adapter.addFragment(new CameraFragment());
         adapter.addFragment(new HomeFragment());
         adapter.addFragment(new MessagesFragment());
-        ViewPager viewPager = (ViewPager) findViewById(R.id.container);
+        ViewPager viewPager = findViewById(R.id.container);
         viewPager.setAdapter(adapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_camera);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_action_name);
+        tabLayout.getTabAt(2).setIcon(R.drawable.ic_messages);
     }
 
 //    BottomNavigationView setup
