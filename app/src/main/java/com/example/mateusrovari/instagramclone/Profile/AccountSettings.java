@@ -1,62 +1,64 @@
 package com.example.mateusrovari.instagramclone.Profile;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.ListView;
 
 import com.example.mateusrovari.instagramclone.R;
 import com.example.mateusrovari.instagramclone.Utils.BottomNavigationViewHelper;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
-public class ProfileActivity extends AppCompatActivity{
+import java.util.ArrayList;
 
-    private ProgressBar mProgress;
+public class AccountSettings extends AppCompatActivity {
+
+    private ListView mListView;
+    private ImageView mBack;
 
     private static final String TAG = "ProfileActivity";
     private static final int ACTIVITY_NUM = 4;
 
-    private Context mContext = ProfileActivity.this;
+    private Context mContext = AccountSettings.this;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
-        Log.d(TAG, "onCreate: started.");
+        setContentView(R.layout.activity_accountsettings);
+        Log.d(TAG, "onCreate: started");
 
         initialize();
         setupBottomNavigationView();
-        setupToolbar();
-
-        mProgress.setVisibility(View.GONE);
+        setupSettingsList();
     }
 
     private void initialize(){
-        mProgress = findViewById(R.id.profileProgressBar);
-    }
-
-    private void setupToolbar(){
-        Toolbar toolbar = findViewById(R.id.profileToolbar);
-        setSupportActionBar(toolbar);
-
-        ImageView profileMenu = findViewById(R.id.profileMenu);
-        profileMenu.setOnClickListener(new View.OnClickListener() {
+        mListView = findViewById(R.id.lvAccountSettings);
+        mBack = findViewById(R.id.backToProfile);
+        mBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: Navigating to account settings");
-                Intent i = new Intent(ProfileActivity.this, AccountSettings.class);
-                startActivity(i);
+                finish();
             }
         });
+    }
 
+    private void setupSettingsList(){
+        Log.d(TAG, "setupSettingsList: Initializing 'account settings' list");
+
+        ArrayList<String> options = new ArrayList<>();
+        options.add(getString(R.string.edit_profile));
+        options.add(getString(R.string.sign_out));
+
+        ArrayAdapter adapter = new ArrayAdapter(mContext, android.R.layout.simple_list_item_1, options);
+        mListView.setAdapter(adapter);
     }
 
     //    BottomNavigationView setup
