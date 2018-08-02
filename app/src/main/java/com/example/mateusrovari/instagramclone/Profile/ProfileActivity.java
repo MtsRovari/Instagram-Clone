@@ -52,7 +52,7 @@ public class ProfileActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: Navigating to account settings");
-                Intent i = new Intent(ProfileActivity.this, AccountSettings.class);
+                Intent i = new Intent(ProfileActivity.this, AccountSettingsActivity.class);
                 startActivity(i);
             }
         });
