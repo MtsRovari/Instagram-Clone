@@ -17,6 +17,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 public class EditProfileFragment extends Fragment {
 
     private ImageView mProfilePhoto;
+    private ImageView backArrow;
 
     private static final String TAG = "EditProfileFragment";
 
@@ -26,14 +27,17 @@ public class EditProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_editprofile, container, false);
         mProfilePhoto = view.findViewById(R.id.profile_photo);
 
-        initImageLoader();
         setProfileImage();
-        return view;
-    }
 
-    private void initImageLoader(){
-        UniversalImageLoader universalImageLoader = new UniversalImageLoader(getActivity());
-        ImageLoader.getInstance().init(universalImageLoader.getConfig());
+//      back arrow for navigating back to "ProfileActivity"
+        backArrow = view.findViewById(R.id.backToProfile);
+        backArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().finish();
+            }
+        });
+        return view;
     }
 
     private  void setProfileImage(){
