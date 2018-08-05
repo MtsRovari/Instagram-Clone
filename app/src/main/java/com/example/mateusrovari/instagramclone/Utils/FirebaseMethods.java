@@ -6,10 +6,12 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.mateusrovari.instagramclone.R;
+import com.example.mateusrovari.instagramclone.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
 
 public class FirebaseMethods {
 
@@ -30,6 +32,25 @@ public class FirebaseMethods {
         if (mAuth.getCurrentUser() != null) {
             userId = mAuth.getCurrentUser().getUid();
         }
+    }
+
+    public boolean checkIfUsernameExists(String username, DataSnapshot dataSnapshot) {
+        Log.d(TAG, "checkIfUsernameExists: checking if " + username + " already exists");
+
+        User user = new User();
+
+        for (DataSnapshot ds: dataSnapshot.getChildren()) {
+            Log.d(TAG, "checkIfUsernameExists: datasnapshot " + ds);
+
+            user.setUsername(ds.getValue(User.class).getUsername());
+            Log.d(TAG, "checkIfUsernameExists: username " + user.getUsername());
+
+            if (StringManipulation.expandUsername(user.getUsername()).equals(username)) {
+                Log.d(TAG, "checkIfUsernameExists: found a match " + user.getUsername());
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
