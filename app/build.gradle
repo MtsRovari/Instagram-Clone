@@ -34,4 +34,7 @@ dependencies {
 
 //    CircleImageView
     implementation 'de.hdodenhof:circleimageview:2.2.0'
+
+//    Universal image loader
+    implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
 }
