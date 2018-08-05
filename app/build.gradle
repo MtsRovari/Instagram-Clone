@@ -40,6 +40,12 @@ dependencies {
 
 //    Fireabase authentication
     implementation 'com.google.firebase:firebase-auth:11.6.0'
+
+//    Firebase database
+    implementation 'com.google.firebase:firebase-database:11.8.0'
+
+//    Firebase dependencie for firebase database
+    implementation 'com.google.firebase:firebase-core:15.0.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
