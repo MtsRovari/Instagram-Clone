@@ -43,8 +43,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         Log.d(TAG, "onCreate: started");
 
-        initialize();
         setupFirebase();
+        initialize();
     }
 
     private void initialize(){
