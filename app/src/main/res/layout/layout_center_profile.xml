@@ -40,7 +40,7 @@
                     android:layout_marginLeft="25dp">
 
                     <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/profileImage"
+                        android:id="@+id/profilePhoto"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
                         app:civ_border_color="@color/grey"
@@ -103,6 +103,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/linLayout2"
+                android:layout_marginTop="20dp"
                 android:layout_marginBottom="50dp">
 
                 <GridView
