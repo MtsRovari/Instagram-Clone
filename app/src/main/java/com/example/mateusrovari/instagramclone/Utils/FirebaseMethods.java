@@ -7,11 +7,14 @@ import android.widget.Toast;
 
 import com.example.mateusrovari.instagramclone.R;
 import com.example.mateusrovari.instagramclone.models.User;
+import com.example.mateusrovari.instagramclone.models.UserAccountSettings;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class FirebaseMethods {
 
@@ -23,10 +26,14 @@ public class FirebaseMethods {
     //    firebase
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListner;
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference myRef;
     private String userId;
 
     public FirebaseMethods(Context context) {
         mAuth = FirebaseAuth.getInstance();
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        myRef = mFirebaseDatabase.getReference();
         mContext = context;
 
         if (mAuth.getCurrentUser() != null) {
@@ -39,7 +46,7 @@ public class FirebaseMethods {
 
         User user = new User();
 
-        for (DataSnapshot ds: dataSnapshot.getChildren()) {
+        for (DataSnapshot ds: dataSnapshot.child(userId).getChildren()) {
             Log.d(TAG, "checkIfUsernameExists: datasnapshot " + ds);
 
             user.setUsername(ds.getValue(User.class).getUsername());
@@ -75,5 +82,29 @@ public class FirebaseMethods {
                         }
                     }
                 });
+    }
+
+    public void addNewUser(String email, String username, String description, String website, String profile_photo) {
+
+        User user = new User(userId, 1, email, StringManipulation.condenseUsername(username));
+
+        myRef.child(mContext.getString(R.string.dbname_users))
+                .child(userId)
+                .setValue(user);
+
+        UserAccountSettings settings = new UserAccountSettings(
+                description,
+                username,
+                0,
+                0,
+                0,
+                profile_photo,
+                username,
+                website
+        );
+
+        myRef.child(mContext.getString(R.string.dbname_user_account_settings))
+                .child(userId)
+                .setValue(settings);
     }
 }
