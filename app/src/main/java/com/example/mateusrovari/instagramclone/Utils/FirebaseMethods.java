@@ -131,7 +131,7 @@ public class FirebaseMethods {
                 0,
                 0,
                 profile_photo,
-                username,
+                StringManipulation.condenseUsername(username),
                 website
         );
 
