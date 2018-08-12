@@ -1,6 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-</LinearLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:layout_centerHorizontal="true">
+
+        <TextView
+            android:id="@+id/tvConfirmSignOut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="Are you sure you want to sign out?"/>
+
+        <Button
+            android:id="@+id/btnConfirmSignOut"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="Sign Out"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/tvConfirmSignOut"
+            android:background="@drawable/white_rounded_button"
+            android:layout_marginTop="20dp"/>
+
+    </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/signOutProgressBar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerInParent="true"/>
+
+    <TextView
+        android:id="@+id/tvSigningOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Signing Out..."
+        android:textSize="20sp"
+        android:layout_below="@id/signOutProgressBar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"/>
+
+</RelativeLayout>
