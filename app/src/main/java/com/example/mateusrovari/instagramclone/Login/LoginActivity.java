@@ -76,6 +76,9 @@ public class LoginActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     Log.d(TAG, "onComplete: onComplete" + task.isSuccessful());
+
+                                    FirebaseUser user = mAuth.getCurrentUser();
+
                                     if (!task.isSuccessful()) {
                                         Log.w(TAG, "onComplete: failed", task.getException());
                                         Toast.makeText(LoginActivity.this, getString(R.string.auth_failed), Toast.LENGTH_SHORT).show();
@@ -83,10 +86,20 @@ public class LoginActivity extends AppCompatActivity {
                                         mPleaseWait.setVisibility(View.GONE);
                                     }
                                     else {
-                                        Log.d(TAG, "onComplete: successful login");
-                                        Toast.makeText(LoginActivity.this, getString(R.string.auth_success), Toast.LENGTH_SHORT).show();
-                                        mProgressBar.setVisibility(View.GONE);
-                                        mPleaseWait.setVisibility(View.GONE);
+                                        try {
+                                            if (user.isEmailVerified()) {
+                                                Log.d(TAG, "onComplete: success. email is verified");
+                                                Intent i = new Intent(LoginActivity.this, HomeActivity.class);
+                                                startActivity(i);
+                                            } else {
+                                                Toast.makeText(mContext, "Email is not verified, check your email inbox", Toast.LENGTH_SHORT).show();
+                                                mProgressBar.setVisibility(View.GONE);
+                                                mPleaseWait.setVisibility(View.GONE);
+                                                mAuth.signOut();
+                                            }
+                                        } catch (NullPointerException e) {
+                                            Log.d(TAG, "onComplete: NullPointerException " + e.getMessage());
+                                        }
                                     }
                                 }
                             });
