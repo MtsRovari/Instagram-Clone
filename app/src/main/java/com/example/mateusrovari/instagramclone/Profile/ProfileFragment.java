@@ -86,6 +86,17 @@ public class ProfileFragment extends Fragment {
 
         initialize();
 
+        TextView editProfile = view.findViewById(R.id.profileEdit);
+        editProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: navigating to fragment");
+                Intent i = new Intent(getActivity(), AccountSettingsActivity.class);
+                i.putExtra(getString(R.string.calling_activity), getString(R.string.profile_activity));
+                startActivity(i);
+            }
+        });
+
         return view;
     }
 
