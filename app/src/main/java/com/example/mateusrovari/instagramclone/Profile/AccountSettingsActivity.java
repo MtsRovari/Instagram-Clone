@@ -1,6 +1,7 @@
 package com.example.mateusrovari.instagramclone.Profile;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
@@ -45,6 +46,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
         setupBottomNavigationView();
         setupSettingsList();
         setupFragments();
+        getIncomingIntent();
     }
 
     private void initialize(){
@@ -58,6 +60,15 @@ public class AccountSettingsActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void getIncomingIntent() {
+        Intent i = getIntent();
+
+        if (i.hasExtra(getString(R.string.calling_activity))) {
+            Log.d(TAG, "getIncomingIntent: received incoming intent");
+            setViewPager(mPagerAdapter.getFragmentNumber(getString(R.string.edit_profile_fragment)));
+        }
     }
 
     private void setupFragments(){
