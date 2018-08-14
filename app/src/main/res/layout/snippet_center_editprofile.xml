@@ -46,7 +46,7 @@
                     android:layout_centerVertical="true"/>
 
                 <EditText
-                    android:id="@+id/username"
+                    android:id="@+id/editProfile_username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -74,7 +74,7 @@
                     android:layout_centerVertical="true"/>
 
                 <EditText
-                    android:id="@+id/display_name"
+                    android:id="@+id/editProfile_display_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -102,7 +102,7 @@
                     android:layout_centerVertical="true"/>
 
                 <EditText
-                    android:id="@+id/website"
+                    android:id="@+id/editProfile_website"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -130,7 +130,7 @@
                     android:layout_centerVertical="true"/>
 
                 <EditText
-                    android:id="@+id/description"
+                    android:id="@+id/editProfile_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -170,7 +170,7 @@
                     android:layout_centerVertical="true"/>
 
                 <EditText
-                    android:id="@+id/email"
+                    android:id="@+id/editProfile_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -198,7 +198,7 @@
                     android:layout_centerVertical="true"/>
 
                 <EditText
-                    android:id="@+id/phoneNumber"
+                    android:id="@+id/editProfile_phoneNumber"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
