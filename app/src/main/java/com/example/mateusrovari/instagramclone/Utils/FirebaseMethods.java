@@ -44,6 +44,50 @@ public class FirebaseMethods {
     }
 
     /**
+     * update user_Account_settings node for the current user
+     * @param displayName
+     * @param website
+     * @param description
+     * @param phoneNumber
+     */
+    public void updateUserAccountSettings(String displayName, String website, String description, long phoneNumber) {
+        Log.d(TAG, "updateUserAccountSettings: updating user account settings");
+
+        if (displayName != null) {
+            myRef.child(mContext.getString(R.string.dbname_user_account_settings))
+                    .child(userId)
+                    .child(mContext.getString(R.string.field_display_name))
+                    .setValue(displayName);
+        }
+
+        if (website != null) {
+            myRef.child(mContext.getString(R.string.dbname_user_account_settings))
+                    .child(userId)
+                    .child(mContext.getString(R.string.field_website))
+                    .setValue(website);
+        }
+
+        if (description != null) {
+            myRef.child(mContext.getString(R.string.dbname_user_account_settings))
+                    .child(userId)
+                    .child(mContext.getString(R.string.field_description))
+                    .setValue(description);
+        }
+
+        if (phoneNumber != 0) {
+            myRef.child(mContext.getString(R.string.dbname_users))
+                    .child(userId)
+                    .child(mContext.getString(R.string.field_phone_number))
+                    .setValue(phoneNumber);
+
+            myRef.child(mContext.getString(R.string.dbname_user_account_settings))
+                    .child(userId)
+                    .child(mContext.getString(R.string.field_phone_number))
+                    .setValue(phoneNumber);
+        }
+    }
+
+    /**
      * update username in the user's node and users_account_settings
      * @param username
      */
@@ -161,6 +205,7 @@ public class FirebaseMethods {
                 0,
                 0,
                 0,
+                0,
                 profile_photo,
                 StringManipulation.condenseUsername(username),
                 website
@@ -215,6 +260,11 @@ public class FirebaseMethods {
                             ds.child(userId)
                                     .getValue(UserAccountSettings.class)
                                     .getProfile_photo()
+                    );
+                    settings.setPhone_number(
+                            ds.child(userId)
+                                    .getValue(UserAccountSettings.class)
+                                    .getPhone_number()
                     );
                     settings.setPosts(
                             ds.child(userId)
