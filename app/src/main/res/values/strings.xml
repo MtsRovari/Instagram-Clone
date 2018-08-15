@@ -29,5 +29,9 @@
     <!--Activity Names-->
     <string name="profile_activity">Profile Activity</string>
 
+    <!--strings-->
+    <string name="gallery">GALLERY</string>
+    <string name="photo">PHOTO</string>
+    <string name="open_camera">OPEN CAMERA</string>
 
 </resources>
