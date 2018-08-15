@@ -4,6 +4,7 @@ public class UserAccountSettings {
 
     private String description;
     private String display_name;
+    private long phone_number;
     private long followers;
     private long following;
     private long posts;
@@ -11,9 +12,10 @@ public class UserAccountSettings {
     private String username;
     private String website;
 
-    public UserAccountSettings(String description, String display_name, long followers, long following, long posts, String profile_photo, String username, String website) {
+    public UserAccountSettings(String description, String display_name, long phone_number, long followers, long following, long posts, String profile_photo, String username, String website) {
         this.description = description;
         this.display_name = display_name;
+        this.phone_number = phone_number;
         this.followers = followers;
         this.following = following;
         this.posts = posts;
@@ -40,6 +42,14 @@ public class UserAccountSettings {
 
     public void setDisplay_name(String display_name) {
         this.display_name = display_name;
+    }
+
+    public long getPhone_number() {
+        return phone_number;
+    }
+
+    public void setPhone_number(long phone_number) {
+        this.phone_number = phone_number;
     }
 
     public long getFollowers() {
