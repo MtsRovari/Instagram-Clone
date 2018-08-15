@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.example.mateusrovari.instagramclone.R;
 import com.example.mateusrovari.instagramclone.Utils.FirebaseMethods;
 import com.example.mateusrovari.instagramclone.Utils.UniversalImageLoader;
+import com.example.mateusrovari.instagramclone.dialogs.ConfirmPasswordDialog;
 import com.example.mateusrovari.instagramclone.models.User;
 import com.example.mateusrovari.instagramclone.models.UserAccountSettings;
 import com.example.mateusrovari.instagramclone.models.UserSettings;
@@ -107,25 +108,28 @@ public class EditProfileFragment extends Fragment {
         final String email = mEmail.getText().toString();
         final long phoneNumber = Long.parseLong(mPhoneNumber.getText().toString());
 
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                //case1: the user did not change their username
-                if (!mUserSettings.getUser().getUsername().equals(username)) {
-                    checkIfUsernameExists(username);
-                }
-                //case2: the user changed their username therefore we need to check for uniqueness
-                else {
+        //case1: if the user node a change to their username
+        if (!mUserSettings.getUser().getUsername().equals(username)) {
+            checkIfUsernameExists(username);
+        }
+        //case2: if the user node a change their email
+        if (!mUserSettings.getUser().getEmail().equals(email)) {
 
-                }
-            }
+            //Reauthentication
+            //      confirm the password and email
+            ConfirmPasswordDialog dialog = new ConfirmPasswordDialog();
+            dialog.show(getFragmentManager(), getString(R.string.confirm_password_dialog));
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+            //check if the email already is registered
+            //      fetchProvidersForEmail(String email)
+
+
+            //change the email
+            //      submit the new email to the database and authentication
+
+        }
     }
 
     /**
