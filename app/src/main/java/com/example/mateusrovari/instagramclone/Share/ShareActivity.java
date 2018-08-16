@@ -39,15 +39,27 @@ public class ShareActivity extends AppCompatActivity{
         Log.d(TAG, "onCreate: started.");
 
         if (checkPermissionsArray(Permissions.PERMISSIONS)) {
-
+            setupViewPager();
         } else {
             verifyPermissions(Permissions.PERMISSIONS);
         }
 
 //        setupBottomNavigationView();
-        setupViewPager();
     }
 
+    /**
+     * return current tab number
+     * gallery = 0
+     * photo = 1
+     * @return
+     */
+    public int getCurrentTabNumber() {
+        return mViewPager.getCurrentItem();
+    }
+
+    /**
+     * setup viewpager for manager the tabs
+     */
     private void setupViewPager() {
         SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new GalleryFragment());
@@ -108,7 +120,7 @@ public class ShareActivity extends AppCompatActivity{
             return false;
         } else {
             Log.d(TAG, "checkPermissions: Permission was granted for " + permission);
-            return false;
+            return true;
         }
     }
 
