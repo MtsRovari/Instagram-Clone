@@ -62,6 +62,26 @@ public class NextActivity extends AppCompatActivity {
         setImage();
     }
 
+    private void someMethod() {
+
+        /**
+         * step 1)
+         * create a data model for Photos
+         *
+         * step 2)
+         * add properties to the photo objects (caption, data, imageUrl, photo_id, tags, uder_id)
+         *
+         * step 3)
+         * count the number of photos that the user already has.
+         *
+         * step 4)
+         * a) upload the photo to firebase storage
+           b) insert into 'photos' node
+           c) insert into 'user_photos' node
+         */
+
+    }
+
     /**
      * gets the image url from the incoming intent and displays the chosen image
      */
