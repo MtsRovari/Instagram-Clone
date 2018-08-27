@@ -39,13 +39,16 @@ dependencies {
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
 
 //    Fireabase authentication
-    implementation 'com.google.firebase:firebase-auth:16.0.2'
+    implementation 'com.google.firebase:firebase-auth:10.2.6'
 
 //    Firebase database
-    implementation 'com.google.firebase:firebase-database:16.0.1'
+    implementation 'com.google.firebase:firebase-database:10.2.6'
 
-//    Firebase dependencie for firebase database
-    implementation 'com.google.firebase:firebase-core:16.0.1'
+////    Firebase dependencie for firebase database
+    implementation 'com.google.firebase:firebase-core:10.2.6'
+
+//    Firebase storage
+    implementation 'com.google.firebase:firebase-storage:10.2.6'
 }
 
 apply plugin: 'com.google.gms.google-services'

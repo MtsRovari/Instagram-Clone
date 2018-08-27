@@ -21,7 +21,7 @@ import com.example.mateusrovari.instagramclone.dialogs.ConfirmPasswordDialog;
 import com.example.mateusrovari.instagramclone.models.User;
 import com.example.mateusrovari.instagramclone.models.UserAccountSettings;
 import com.example.mateusrovari.instagramclone.models.UserSettings;
-import com.google.android.gms.flags.IFlagProvider;
+//import com.google.android.gms.flags.IFlagProvider;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
