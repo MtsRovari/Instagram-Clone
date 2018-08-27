@@ -32,6 +32,10 @@
     <!--Activity Names-->
     <string name="profile_activity">Profile Activity</string>
 
+    <!--photos types-->
+    <string name="new_photo">new_photo</string>
+    <string name="profile_photo">profile_photo</string>
+
     <!--strings-->
     <string name="gallery">GALLERY</string>
     <string name="photo">PHOTO</string>
