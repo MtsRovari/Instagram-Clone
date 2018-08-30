@@ -2,6 +2,7 @@ package com.example.mateusrovari.instagramclone.Profile;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
@@ -66,15 +67,27 @@ public class AccountSettingsActivity extends AppCompatActivity {
     private void getIncomingIntent() {
         Intent i = getIntent();
 
-        //if there is an imageUrl attached as an extra, then it was chosen from the gallery/photo_fragment
-        if (i.hasExtra(getString(R.string.selected_image))) {
+        if (i.hasExtra(getString(R.string.selected_image))
+                || i.hasExtra(getString(R.string.selected_bitmap))) {
+
+            //if there is an imageUrl attached as an extra, then it was chosen from the gallery/photo_fragment
             Log.d(TAG, "getIncomingIntent: new incoming imgUrl");
             if (i.getStringExtra(getString(R.string.return_to_fragment)).equals(getString(R.string.edit_profile_fragment))) {
-                //set the new profile picture
-                FirebaseMethods firebaseMethods = new FirebaseMethods(AccountSettingsActivity.this);
-                firebaseMethods.uploadNewPhoto(getString(R.string.profile_photo), null, 0,
-                        i.getStringExtra(getString(R.string.selected_image)));
+
+                if (i.hasExtra(getString(R.string.selected_image))) {
+                    //set the new profile picture
+                    FirebaseMethods firebaseMethods = new FirebaseMethods(AccountSettingsActivity.this);
+                    firebaseMethods.uploadNewPhoto(getString(R.string.profile_photo), null, 0,
+                            i.getStringExtra(getString(R.string.selected_image)), null);
+
+                } else if (i.hasExtra(getString(R.string.selected_bitmap))) {
+                    //set the new profile picture
+                    FirebaseMethods firebaseMethods = new FirebaseMethods(AccountSettingsActivity.this);
+                    firebaseMethods.uploadNewPhoto(getString(R.string.profile_photo), null, 0,
+                            null, (Bitmap) i.getParcelableExtra(getString(R.string.selected_bitmap)));
+                }
             }
+
         }
 
         if (i.hasExtra(getString(R.string.calling_activity))) {
