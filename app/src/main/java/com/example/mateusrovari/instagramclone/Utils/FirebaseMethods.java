@@ -10,6 +10,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.mateusrovari.instagramclone.Home.HomeActivity;
+import com.example.mateusrovari.instagramclone.Profile.AccountSettingsActivity;
 import com.example.mateusrovari.instagramclone.R;
 import com.example.mateusrovari.instagramclone.models.Photo;
 import com.example.mateusrovari.instagramclone.models.User;
@@ -122,6 +123,11 @@ public class FirebaseMethods {
         //case1) new profile photo
         else if (photoType.equals(mContext.getString(R.string.profile_photo))) {
             Log.d(TAG, "uploadNewPhoto: uploading NEW profile photo");
+
+            ((AccountSettingsActivity)mContext).setViewPager(
+                    ((AccountSettingsActivity)mContext).mPagerAdapter
+                            .getFragmentNumber(mContext.getString(R.string.edit_profile_fragment))
+            );
 
             String user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
             StorageReference storageReference = mStorageReference
