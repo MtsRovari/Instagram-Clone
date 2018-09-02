@@ -19,11 +19,13 @@ import com.example.mateusrovari.instagramclone.R;
 import com.example.mateusrovari.instagramclone.Utils.BottomNavigationViewHelper;
 import com.example.mateusrovari.instagramclone.Utils.GridImageAdapter;
 import com.example.mateusrovari.instagramclone.Utils.UniversalImageLoader;
+import com.example.mateusrovari.instagramclone.ViewPostFragment;
+import com.example.mateusrovari.instagramclone.models.Photo;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.util.ArrayList;
 
-public class ProfileActivity extends AppCompatActivity{
+public class ProfileActivity extends AppCompatActivity implements ProfileFragment.OnGridImageSelectedListner{
 
     private ProgressBar mProgress;
     private ImageView profilePhoto;
@@ -42,12 +44,6 @@ public class ProfileActivity extends AppCompatActivity{
 
         init();
 
-//        initialize();
-//        setupBottomNavigationView();
-//        setupToolbar();
-//        setProfileImage();
-//
-//        tempGridSetup();
     }
     
     private void init() {
@@ -60,68 +56,19 @@ public class ProfileActivity extends AppCompatActivity{
         transaction.commit();
     }
 
-//    private void initialize() {
-//        mProgress = findViewById(R.id.profileProgressBar);
-//        mProgress.setVisibility(View.GONE);
-//        profilePhoto = findViewById(R.id.profilePhoto);
-//    }
-//
-//    private void tempGridSetup(){
-//        ArrayList<String> imgURLs = new ArrayList<>();
-//        imgURLs.add("http://www.loucoporviagens.com.br/wp-content/uploads/2011/11/rochadopulpito.jpg");
-//        imgURLs.add("http://www.loucoporviagens.com.br/wp-content/uploads/2011/11/cavernaazul.jpg");
-//        imgURLs.add("http://www.loucoporviagens.com.br/wp-content/uploads/2011/11/jiuzhaigou.jpg");
-//        imgURLs.add("http://www.loucoporviagens.com.br/wp-content/uploads/2011/11/Plitvice.jpg");
-//        imgURLs.add("http://www.loucoporviagens.com.br/wp-content/uploads/2011/11/skaftafeli.jpg");
-//        imgURLs.add("http://www.loucoporviagens.com.br/wp-content/uploads/2011/11/paterswildsemeer.jpg");
-//        imgURLs.add("http://www.loucoporviagens.com.br/wp-content/uploads/2011/11/cavernasdemarmore.jpg");
-//        imgURLs.add("http://www.loucoporviagens.com.br/wp-content/uploads/2011/11/borabora.jpg");
-//        imgURLs.add("http://www.loucoporviagens.com.br/wp-content/uploads/2011/11/capilano.jpg");
-//
-//        setupImageGrid(imgURLs);
-//    }
+    @Override
+    public void onGridImageSelected(Photo photo, int activityNumber) {
+        Log.d(TAG, "onGridImageSelected: selected an image from gridvew " + photo.toString());
 
-//    private void setupImageGrid(ArrayList<String> imgURLs) {
-//        GridView gridView = findViewById(R.id.gridView);
-//
-//        int gridWidth = getResources().getDisplayMetrics().widthPixels;
-//        int imageWidth = gridWidth/NUM_GRID_COLLUMNS;
-//        gridView.setColumnWidth(imageWidth);
-//
-//        GridImageAdapter mAdapter = new GridImageAdapter(mContext, R.layout.layout_grid_imageview, "", imgURLs);
-//        gridView.setAdapter(mAdapter);
-//    }
-//
-//    private void setProfileImage() {
-//        Log.d(TAG, "setProfileImage: setting profile photo");
-//        String imgURL = "media.licdn.com/dms/image/C4D03AQES5n0xQz-xtQ/profile-displayphoto-shrink_200_200/0?e=1539216000&v=beta&t=WhJKFmuQoQ3MMzSp9SzQT_uVeTfrAsYhKBuhBqQa8hA";
-//        UniversalImageLoader.setImage(imgURL, profilePhoto, mProgress, "https://");
-//    }
-//
-//    private void setupToolbar() {
-//        Toolbar toolbar = findViewById(R.id.profileToolbar);
-//        setSupportActionBar(toolbar);
-//
-//        ImageView profileMenu = findViewById(R.id.profileMenu);
-//        profileMenu.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.d(TAG, "onClick: Navigating to account settings");
-//                Intent i = new Intent(ProfileActivity.this, AccountSettingsActivity.class);
-//                startActivity(i);
-//            }
-//        });
-//
-//    }
-//
-//    //    BottomNavigationView setup
-//    private void setupBottomNavigationView(){
-//        Log.d(TAG, "setupBottomNavigationView: setting up BottomNavigationView");
-//        BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomNavViewBar);
-//        BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationViewEx);
-//        BottomNavigationViewHelper.enableNavigation(mContext, bottomNavigationViewEx);
-//        Menu menu = bottomNavigationViewEx.getMenu();
-//        MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
-//        menuItem.setChecked(true);
-//    }
+        ViewPostFragment fragment = new ViewPostFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(getString(R.string.photo), photo);
+        args.putInt(getString(R.string.activity_number), activityNumber);
+        fragment.setArguments(args);
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, fragment);
+        transaction.addToBackStack(getString(R.string.view_post_fragment));
+        transaction.commit();
+    }
 }
