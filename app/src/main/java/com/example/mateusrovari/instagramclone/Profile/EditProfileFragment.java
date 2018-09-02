@@ -89,6 +89,7 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
             @Override
             public void onClick(View v) {
                 getActivity().finish();
+                getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             }
         });
 
