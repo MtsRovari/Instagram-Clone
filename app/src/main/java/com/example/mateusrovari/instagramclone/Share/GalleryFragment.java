@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mateusrovari.instagramclone.Profile.AccountSettingsActivity;
 import com.example.mateusrovari.instagramclone.R;
@@ -151,8 +152,16 @@ public class GalleryFragment extends Fragment {
         gridView.setAdapter(adapter);
 
         //set the first image to be displayed when the activity frgment view is clicked or verified
-        setImage(imgURLs.get(0), galleryImage, mAppend);
-        mSelectedImage = imgURLs.get(0);
+        try {
+            if (imgURLs.size() > 0) {
+                setImage(imgURLs.get(0), galleryImage, mAppend);
+                mSelectedImage = imgURLs.get(0);
+            } else {
+                Toast.makeText(getActivity(), "Error while displaying directory", Toast.LENGTH_SHORT).show();
+            }
+        }catch (ArrayIndexOutOfBoundsException e) {
+            Log.d(TAG, "setupGridView: ArrayIndexOutOfBoundsException: " + e.getMessage());
+        }
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
