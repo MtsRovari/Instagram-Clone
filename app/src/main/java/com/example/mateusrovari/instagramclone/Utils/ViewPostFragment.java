@@ -306,6 +306,7 @@ public class ViewPostFragment extends Fragment {
         UniversalImageLoader.setImage(mUserAccountSettings.getProfile_photo(), mProfileImage, null, "");
         mUsername.setText(mUserAccountSettings.getUsername());
         mLikes.setText(mLikesString);
+        mCaption.setText(mPhoto.getCaption());
 
         if (mLikedByCurrentUser) {
             mHeartWhite.setVisibility(View.GONE);
