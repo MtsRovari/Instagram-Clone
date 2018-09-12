@@ -1,5 +1,7 @@
 package com.example.mateusrovari.instagramclone.Utils;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -48,6 +50,11 @@ public class ViewPostFragment extends Fragment {
 
     private static final String TAG = "ViewPostFragment";
 
+    public interface OnCommentThreadSelectedListner {
+        void onCommentThreadSelectedListner(Photo photo);
+    }
+    OnCommentThreadSelectedListner mOnCommentThreadSelectedListner;
+
     public ViewPostFragment() {
         super();
         setArguments(new Bundle());
@@ -76,7 +83,7 @@ public class ViewPostFragment extends Fragment {
     private SquareImageView mPostImage;
     private BottomNavigationViewEx bottomNavigationView;
     private TextView mBlackLabel, mCaption, mUsername, mTimestamp, mLikes;
-    private ImageView mBackArrow, mMore, mHeartRed, mHeartWhite, mProfileImage;
+    private ImageView mBackArrow, mMore, mHeartRed, mHeartWhite, mProfileImage, mComment;
 
     @Nullable
     @Override
@@ -96,6 +103,7 @@ public class ViewPostFragment extends Fragment {
         mHeartWhite = view.findViewById(R.id.image_heat_outline);
         mProfileImage = view.findViewById(R.id.profile_photo);
         mHeart = new Heart(mHeartWhite, mHeartRed);
+        mComment = view.findViewById(R.id.image_comments);
         mGestureDetector = new GestureDetector(getActivity(), new GestureListner());
 
         try {
@@ -112,6 +120,16 @@ public class ViewPostFragment extends Fragment {
         setupBottomNavigationView();
 
         return view;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mOnCommentThreadSelectedListner = (OnCommentThreadSelectedListner) getActivity();
+        }catch (ClassCastException e) {
+            Log.d(TAG, "onAttach: ClassCastException " + e.getMessage());
+        }
     }
 
     private void getLikesString() {
@@ -307,6 +325,21 @@ public class ViewPostFragment extends Fragment {
         mUsername.setText(mUserAccountSettings.getUsername());
         mLikes.setText(mLikesString);
         mCaption.setText(mPhoto.getCaption());
+
+        mBackArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: navigation back");
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
+        });
+
+        mComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnCommentThreadSelectedListner.onCommentThreadSelectedListner(mPhoto);
+            }
+        });
 
         if (mLikedByCurrentUser) {
             mHeartWhite.setVisibility(View.GONE);
