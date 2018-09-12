@@ -10,10 +10,12 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.example.mateusrovari.instagramclone.R;
+import com.example.mateusrovari.instagramclone.Utils.ViewCommentsFragment;
 import com.example.mateusrovari.instagramclone.Utils.ViewPostFragment;
 import com.example.mateusrovari.instagramclone.models.Photo;
 
-public class ProfileActivity extends AppCompatActivity implements ProfileFragment.OnGridImageSelectedListner{
+public class ProfileActivity extends AppCompatActivity implements ProfileFragment.OnGridImageSelectedListner, 
+        ViewPostFragment.OnCommentThreadSelectedListner{
 
     private ProgressBar mProgress;
     private ImageView profilePhoto;
@@ -57,6 +59,21 @@ public class ProfileActivity extends AppCompatActivity implements ProfileFragmen
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container, fragment);
         transaction.addToBackStack(getString(R.string.view_post_fragment));
+        transaction.commit();
+    }
+
+    @Override
+    public void onCommentThreadSelectedListner(Photo photo) {
+        Log.d(TAG, "onCommentThreadSelectedListner: selected a comment thread");
+
+        ViewCommentsFragment fragment = new ViewCommentsFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(getString(R.string.photo), photo);
+        fragment.setArguments(args);
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, fragment);
+        transaction.addToBackStack(getString(R.string.view_comments_fragment));
         transaction.commit();
     }
 }
