@@ -1,5 +1,6 @@
 package com.example.mateusrovari.instagramclone.Utils;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,10 +13,12 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mateusrovari.instagramclone.R;
 import com.example.mateusrovari.instagramclone.models.Comment;
@@ -50,6 +53,12 @@ public class ViewCommentsFragment extends Fragment {
         setArguments(new Bundle());
     }
 
+    //firebase
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListner;
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference myRef;
+
     //widgets
     private ImageView mBackArrow, mCheckMark;
     private EditText mComment;
@@ -69,6 +78,8 @@ public class ViewCommentsFragment extends Fragment {
         mListView = view.findViewById(R.id.listView);
         mComments = new ArrayList<>();
 
+        setupFirebaseAuth();
+
         try {
             mPhoto = getPhotoFromBundle();
         } catch (NullPointerException e) {
@@ -84,7 +95,61 @@ public class ViewCommentsFragment extends Fragment {
         CommentListAdapter adapter = new CommentListAdapter(getActivity(), R.layout.layout_comment, mComments);
         mListView.setAdapter(adapter);
 
+        mCheckMark.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!mComment.getText().toString().equals("")) {
+                    Log.d(TAG, "onClick: attempting to submit new comment");
+                    addNewComment(mComment.getText().toString());
+                    mComment.setText("");
+                    closeKeyBoard();
+                } else {
+                    Toast.makeText(getActivity(), "You can't post a blank comment", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         return view;
+    }
+
+    private void closeKeyBoard() {
+        View view = getActivity().getCurrentFocus();
+        if (view != null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    private void addNewComment(String newComment) {
+        Log.d(TAG, "addNewComment: adding new comment " + newComment);
+
+        String commentId = myRef.push().getKey();
+
+        Comment comment = new Comment();
+        comment.setComment(newComment);
+        comment.setDate_created(getTimeStamp());
+        comment.setUser_id(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+        //insert into photos node
+        myRef.child(getString(R.string.dbname_photos))
+                .child(mPhoto.getPhoto_id())
+                .child(getString(R.string.field_comments))
+                .child(commentId)
+                .setValue(comment);
+
+        //insert into user_photos node
+        myRef.child(getString(R.string.dbname_user_photos))
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child(mPhoto.getPhoto_id())
+                .child(getString(R.string.field_comments))
+                .child(commentId)
+                .setValue(comment);
+    }
+
+    private String getTimeStamp() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.CANADA);
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Canada/Pacific"));
+        return simpleDateFormat.format(new Date());
     }
 
     /**
@@ -99,6 +164,91 @@ public class ViewCommentsFragment extends Fragment {
             return bundle.getParcelable(getString(R.string.photo));
         } else {
             return null;
+        }
+    }
+
+    /**
+     * returns a string representing the number of days ago the post was made
+     * @return
+     */
+    private String getTimestampDifference() {
+        Log.d(TAG, "getTimestampDifference: getting timestamp difference");
+
+        String difference = "";
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.CANADA);
+        sdf.setTimeZone(TimeZone.getTimeZone("Canada/Pacific"));
+        Date today = c.getTime();
+        sdf.format(today);
+        Date timestamp;
+        final String photoTimestamp = mPhoto.getData_created();
+        try {
+            timestamp = sdf.parse(photoTimestamp);
+            difference = String.valueOf(Math.round(((today.getTime() - timestamp.getTime()) / 1000 / 60 / 60 / 24)));
+        }catch (ParseException e) {
+            Log.e(TAG, "getTimestampDifference: ParseException: " + e.getMessage());
+            difference = "0";
+        }
+
+        return difference;
+    }
+
+    /**
+     * retrieve the activity number from the incoming bundle from profileActivity interface
+     * @return
+     */
+    private int getActivityNumFromBundle() {
+        Log.d(TAG, "getActivityNumFromBundle: arguments : " + getArguments());
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            return bundle.getInt(getString(R.string.photo));
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     ---------------------------------- Firebase -------------------------------------
+     */
+
+    /**
+     * Setup the firebase auth object
+     */
+    private void setupFirebaseAuth() {
+        Log.d(TAG, "setupFirebase: starting");
+        mAuth = FirebaseAuth.getInstance();
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        myRef = mFirebaseDatabase.getReference();
+
+        mAuthListner = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+
+                if (user != null) {
+                    //user is signed in
+                    Log.d(TAG, "onAuthStateChanged: signed_in" + user.getUid());
+                } else {
+                    //user is signed out
+                    Log.d(TAG, "onAuthStateChanged: signed_out");
+                }
+            }
+        };
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListner);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAuthListner != null) {
+            mAuth.removeAuthStateListener(mAuthListner);
         }
     }
 }
