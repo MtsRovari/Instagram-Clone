@@ -69,6 +69,7 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
             holder.timestamp = convertView.findViewById(R.id.comment_time_posted);
             holder.reply = convertView.findViewById(R.id.comment_reply);
             holder.like = convertView.findViewById(R.id.comment_like);
+            holder.likes = convertView.findViewById(R.id.comment_likes);
             holder.profileImage = convertView.findViewById(R.id.comment_profile_image);
 
             convertView.setTag(holder);
