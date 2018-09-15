@@ -14,9 +14,10 @@ public class Photo implements Parcelable {
     private String user_id;
     private String tags;
     private List<Like> likes;
+    private List<Comment> comments;
 
     public Photo(String caption, String data_created, String image_path, String photo_id,
-                 String user_id, String tags, List<Like> likes) {
+                 String user_id, String tags, List<Like> likes, List<Comment> comments) {
         this.caption = caption;
         this.data_created = data_created;
         this.image_path = image_path;
@@ -24,6 +25,7 @@ public class Photo implements Parcelable {
         this.user_id = user_id;
         this.tags = tags;
         this.likes = likes;
+        this.comments = comments;
     }
 
     public Photo() {
@@ -37,6 +39,18 @@ public class Photo implements Parcelable {
         photo_id = in.readString();
         user_id = in.readString();
         tags = in.readString();
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public static Creator<Photo> getCREATOR() {
+        return CREATOR;
     }
 
     public static final Creator<Photo> CREATOR = new Creator<Photo>() {
