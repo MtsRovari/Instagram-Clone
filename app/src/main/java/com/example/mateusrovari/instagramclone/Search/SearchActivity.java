@@ -1,6 +1,7 @@
 package com.example.mateusrovari.instagramclone.Search;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.example.mateusrovari.instagramclone.Profile.ProfileActivity;
 import com.example.mateusrovari.instagramclone.R;
 import com.example.mateusrovari.instagramclone.Utils.BottomNavigationViewHelper;
 import com.example.mateusrovari.instagramclone.Utils.UsersListAdapter;
@@ -126,6 +128,11 @@ public class SearchActivity extends AppCompatActivity{
                 Log.d(TAG, "onItemClick: selected user: " + mUserList.get(position).toString());
 
                 //navigate to profile activity
+                Intent i = new Intent(SearchActivity.this, ProfileActivity.class);
+                i.putExtra(getString(R.string.calling_activity), getString(R.string.search_activity));
+                i.putExtra(getString(R.string.intent_user), mUserList.get(position));
+                startActivity(i);
+
 
             }
         });

@@ -8,4 +8,6 @@
     <color name="white">#fff</color>
     <color name="black">#000000</color>
     <color name="blue_link">#005ce6</color>
+    <color name="follow">#4d94ff</color>
+    <color name="darkRed">#cc00</color>
 </resources>
