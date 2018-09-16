@@ -26,6 +26,7 @@ import com.example.mateusrovari.instagramclone.Utils.BottomNavigationViewHelper;
 import com.example.mateusrovari.instagramclone.Utils.FirebaseMethods;
 import com.example.mateusrovari.instagramclone.Utils.GridImageAdapter;
 import com.example.mateusrovari.instagramclone.Utils.UniversalImageLoader;
+import com.example.mateusrovari.instagramclone.models.Comment;
 import com.example.mateusrovari.instagramclone.models.Like;
 import com.example.mateusrovari.instagramclone.models.Photo;
 import com.example.mateusrovari.instagramclone.models.User;
@@ -157,6 +158,18 @@ public class ProfileFragment extends Fragment {
                     photo.setUser_id(objectMap.get(getString(R.string.field_user_id)).toString());
                     photo.setData_created(objectMap.get(getString(R.string.field_data_created)).toString());
                     photo.setImage_path(objectMap.get(getString(R.string.field_image_path)).toString());
+
+                    ArrayList<Comment> mComments = new ArrayList<Comment>();
+                    for (DataSnapshot dSnapshot : singleSnapshot
+                            .child(getString(R.string.field_comments)).getChildren()) {
+                        Comment comment = new Comment();
+                        comment.setUser_id(dSnapshot.getValue(Comment.class).getUser_id());
+                        comment.setComment(dSnapshot.getValue(Comment.class).getComment());
+                        comment.setDate_created(dSnapshot.getValue(Comment.class).getDate_created());
+                        mComments.add(comment);
+                    }
+
+                    photo.setComments(mComments);
 
                     List<Like> likesList = new ArrayList<Like>();
                     for (DataSnapshot dSnapshot : singleSnapshot
