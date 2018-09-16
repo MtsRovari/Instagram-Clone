@@ -16,6 +16,8 @@ import com.example.mateusrovari.instagramclone.Profile.AccountSettingsActivity;
 import com.example.mateusrovari.instagramclone.R;
 import com.example.mateusrovari.instagramclone.Utils.Permissions;
 
+import static android.app.Activity.RESULT_OK;
+
 public class PhotoFragment extends Fragment {
     private static final String TAG = "PhotoFragment";
 
@@ -66,6 +68,8 @@ public class PhotoFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        
+        if (resultCode != RESULT_OK) return;
 
         if (requestCode == CAMERA_REQUEST_CODE) {
             Log.d(TAG, "onActivityResult: done taking a photo");
