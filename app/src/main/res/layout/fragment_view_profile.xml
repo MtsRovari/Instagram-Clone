@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <include layout="@layout/snippet_top_profilebar"></include>
+        <include layout="@layout/snippet_top_view_profilebar"></include>
 
 
     </RelativeLayout>

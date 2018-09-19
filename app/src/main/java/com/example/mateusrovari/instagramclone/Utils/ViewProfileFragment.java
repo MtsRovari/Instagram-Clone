@@ -68,7 +68,7 @@ public class ViewProfileFragment extends Fragment {
     private CircleImageView mProfilePhoto;
     private GridView gridView;
     private Toolbar toolbar;
-    private ImageView profileMenu;
+    private ImageView profileMenu, mBackArrow;
     private BottomNavigationView bottomNavigationView;
     TextView editProfile;
 
@@ -80,6 +80,9 @@ public class ViewProfileFragment extends Fragment {
 
     //var
     private User mUser;
+    private int mFollowersCount = 0;
+    private int mFlollowingCount = 0;
+    private int mPostsCount = 0;
 
     @Nullable
     @Override
@@ -101,6 +104,7 @@ public class ViewProfileFragment extends Fragment {
         profileMenu = view.findViewById(R.id.profileMenu);
         bottomNavigationView = view.findViewById(R.id.bottomNavViewBar);
         mFollow = view.findViewById(R.id.ViewFollow);
+        mBackArrow = view.findViewById(R.id.backArrow);
         mUnfollow = view.findViewById(R.id.ViewUnfollow);
         editProfile = view.findViewById(R.id.profileEdit);
         mContext = getActivity();
@@ -218,12 +222,12 @@ public class ViewProfileFragment extends Fragment {
                 "",  imgUrls);
         gridView.setAdapter(adapter);
 
-//        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                mOnGridImageSelectedListner.onGridImageSelected(photos.get(position), ACTIVITY_NUM);
-//            }
-//        });
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mOnGridImageSelectedListner.onGridImageSelected(photos.get(position), ACTIVITY_NUM);
+            }
+        });
     }
 
     private User getUserFromBundle() {
@@ -258,9 +262,12 @@ public class ViewProfileFragment extends Fragment {
         }
 
         setupBottomNavigationView();
-        setupToolbar();
+//        setupToolbar();
         setupFirebaseAuth();
-        isFollowing(); 
+        isFollowing();
+        getFollowers();
+        getFollowing();
+        getPosts();
 
         mFollow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -336,6 +343,75 @@ public class ViewProfileFragment extends Fragment {
         });
     }
 
+    private void getFollowers() {
+        mFollowersCount = 0;
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        Query query = reference
+                .child(getString(R.string.dbname_followers))
+                .child(mUser.getUser_id());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                    Log.d(TAG, "onDataChange: found follower: " + singleSnapshot.getValue());
+                    mFollowersCount++;
+                }
+                mFollowers.setText(String.valueOf(mFollowersCount));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void getFollowing() {
+        mFlollowingCount = 0;
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        Query query = reference
+                .child(getString(R.string.dbname_following))
+                .child(mUser.getUser_id());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                    Log.d(TAG, "onDataChange: found following: " + singleSnapshot.getValue());
+                    mFlollowingCount++;
+                }
+                mFollowing.setText(String.valueOf(mFlollowingCount));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void getPosts() {
+        mPostsCount = 0;
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        Query query = reference
+                .child(getString(R.string.dbname_user_photos))
+                .child(mUser.getUser_id());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                    Log.d(TAG, "onDataChange: found following: " + singleSnapshot.getValue());
+                    mPostsCount++;
+                }
+                mPosts.setText(String.valueOf(mPostsCount));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     private void setFollowing() {
         Log.d(TAG, "setFollowing: updating UID for following this user");
         mFollow.setVisibility(View.GONE);
@@ -372,23 +448,32 @@ public class ViewProfileFragment extends Fragment {
         mFollowing.setText(String.valueOf(settings.getFollowing()));
         mFollowers.setText(String.valueOf(settings.getFollowers()));
         mProgressBar.setVisibility(View.GONE);
-    }
 
-    private void setupToolbar() {
-
-        ((ProfileActivity)getActivity()).setSupportActionBar(toolbar);
-
-        profileMenu.setOnClickListener(new View.OnClickListener() {
+        mBackArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: Navigating to account settings");
-                Intent i = new Intent(mContext, AccountSettingsActivity.class);
-                startActivity(i);
-                getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                Log.d(TAG, "onClick: navigating back ");
+                getActivity().getSupportFragmentManager().popBackStack();
+                getActivity().finish();
             }
         });
-
     }
+
+//    private void setupToolbar() {
+//
+//        ((ProfileActivity)getActivity()).setSupportActionBar(toolbar);
+//
+//        profileMenu.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.d(TAG, "onClick: Navigating to account settings");
+//                Intent i = new Intent(mContext, AccountSettingsActivity.class);
+//                startActivity(i);
+//                getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+//            }
+//        });
+//
+//    }
 
     //    BottomNavigationView setup
     private void setupBottomNavigationView(){

@@ -18,7 +18,8 @@ import com.example.mateusrovari.instagramclone.Utils.ViewProfileFragment;
 import com.example.mateusrovari.instagramclone.models.Photo;
 
 public class ProfileActivity extends AppCompatActivity implements ProfileFragment.OnGridImageSelectedListner, 
-        ViewPostFragment.OnCommentThreadSelectedListner{
+        ViewPostFragment.OnCommentThreadSelectedListner,
+        ViewProfileFragment.OnGridImageSelectedListner{
 
     private ProgressBar mProgress;
     private ImageView profilePhoto;
