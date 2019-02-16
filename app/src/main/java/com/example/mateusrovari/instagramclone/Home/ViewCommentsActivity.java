@@ -1,32 +1,23 @@
-package com.example.mateusrovari.instagramclone.Utils;
+package com.example.mateusrovari.instagramclone.Home;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.GestureDetector;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mateusrovari.instagramclone.R;
+import com.example.mateusrovari.instagramclone.Utils.CommentListAdapter;
 import com.example.mateusrovari.instagramclone.models.Comment;
-import com.example.mateusrovari.instagramclone.models.Like;
 import com.example.mateusrovari.instagramclone.models.Photo;
-import com.example.mateusrovari.instagramclone.models.User;
-import com.example.mateusrovari.instagramclone.models.UserAccountSettings;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -36,7 +27,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -44,19 +34,18 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
-public class ViewCommentsFragment extends Fragment {
+public class ViewCommentsActivity extends AppCompatActivity {
 
-    private static final String TAG = "ViewCommentsFragment";
+    private static final String TAG = "ViewCommentsActivity";
 
-    public ViewCommentsFragment() {
-        super();
-        setArguments(new Bundle());
-    }
+//    public ViewCommentsActivity() {
+//        super();
+//        setArguments(new Bundle());
+//    }
 
     //firebase
     private FirebaseAuth mAuth;
@@ -74,25 +63,52 @@ public class ViewCommentsFragment extends Fragment {
     private ArrayList<Comment> mComments;
     private Context mContext;
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_view_comments, container, false);
-        mBackArrow = view.findViewById(R.id.backArrow);
-        mCheckMark = view.findViewById(R.id.ivPostComment);
-        mComment = view.findViewById(R.id.comment);
-        mListView = view.findViewById(R.id.listView);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_view_comments);
+        mBackArrow = findViewById(R.id.backArrow);
+        mCheckMark = findViewById(R.id.ivPostComment);
+        mComment = findViewById(R.id.comment);
+        mListView = findViewById(R.id.listView);
         mComments = new ArrayList<>();
-        mContext = getActivity();
+        mContext = ViewCommentsActivity.this;
 
-        try {
-            mPhoto = getPhotoFromBundle();
+//        try {
+            mPhoto = getFromBundle();
+//            getFromBundle();
             setupFirebaseAuth();
-        } catch (NullPointerException e) {
-            Log.e(TAG, "onCreateView: NullPointerException:" + e.getMessage());
-        }
+//        } catch (NullPointerException e) {
+//            Log.e(TAG, "onCreateView: NullPointerException:" + e.getMessage());
+//        }
+    }
 
-        return view;
+//    @Nullable
+//    @Override
+//    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+//        View view = inflater.inflate(R.layout.fragment_view_comments, container, false);
+//        mBackArrow = view.findViewById(R.id.backArrow);
+//        mCheckMark = view.findViewById(R.id.ivPostComment);
+//        mComment = view.findViewById(R.id.comment);
+//        mListView = view.findViewById(R.id.listView);
+//        mComments = new ArrayList<>();
+//        mContext = getActivity();
+//
+//        try {
+//            mPhoto = getPhotoFromBundle();
+//            setupFirebaseAuth();
+//        } catch (NullPointerException e) {
+//            Log.e(TAG, "onCreateView: NullPointerException:" + e.getMessage());
+//        }
+//
+//        return view;
+//    }
+
+    private Photo getFromBundle() {
+        Intent i = getIntent();
+        Photo photo = i.getParcelableExtra(getString(R.string.bundle_photo));
+        Log.e(TAG, "getFromBundle: " + photo);
+        return photo;
     }
 
     private void setupWidgets() {
@@ -109,7 +125,7 @@ public class ViewCommentsFragment extends Fragment {
                     mComment.setText("");
                     closeKeyBoard();
                 } else {
-                    Toast.makeText(getActivity(), "You can't post a blank comment", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ViewCommentsActivity.this, "You can't post a blank comment", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -117,15 +133,15 @@ public class ViewCommentsFragment extends Fragment {
         mBackArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().getSupportFragmentManager().popBackStack();
+                ViewCommentsActivity.this.getSupportFragmentManager().popBackStack();
             }
         });
     }
 
     private void closeKeyBoard() {
-        View view = getActivity().getCurrentFocus();
+        View view = this.getCurrentFocus();
         if (view != null) {
-            InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager inputMethodManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
@@ -167,9 +183,10 @@ public class ViewCommentsFragment extends Fragment {
      * @return
      */
     private Photo getPhotoFromBundle() {
-        Log.d(TAG, "getPhotoFromBundle: arguments : " + getArguments());
+//        Log.d(TAG, "getPhotoFromBundle: arguments : " + getArguments());
 
-        Bundle bundle = this.getArguments();
+        Bundle bundle = new Bundle();
+
         if (bundle != null) {
             return bundle.getParcelable(getString(R.string.photo));
         } else {
@@ -207,16 +224,16 @@ public class ViewCommentsFragment extends Fragment {
      * retrieve the activity number from the incoming bundle from profileActivity interface
      * @return
      */
-    private int getActivityNumFromBundle() {
-        Log.d(TAG, "getActivityNumFromBundle: arguments : " + getArguments());
-
-        Bundle bundle = this.getArguments();
-        if (bundle != null) {
-            return bundle.getInt(getString(R.string.photo));
-        } else {
-            return 0;
-        }
-    }
+//    private int getActivityNumFromBundle() {
+//        Log.d(TAG, "getActivityNumFromBundle: arguments : " + getArguments());
+//
+//        Bundle bundle = this.getArguments();
+//        if (bundle != null) {
+//            return bundle.getInt(getString(R.string.photo));
+//        } else {
+//            return 0;
+//        }
+//    }
 
     /**
      ---------------------------------- Firebase -------------------------------------
@@ -246,8 +263,9 @@ public class ViewCommentsFragment extends Fragment {
             }
         };
 
-        if (mPhoto.getComments().size() == 0) {
-            mComments.clear();
+        Log.e(TAG, "setupFirebaseAuth: " + mPhoto.getComments());
+        if (mPhoto.getComments() == null) {
+//            mComments.clear();
             Comment firstComment = new Comment();
             firstComment.setComment(mPhoto.getCaption());
             firstComment.setUser_id(mPhoto.getUser_id());
@@ -345,17 +363,17 @@ public class ViewCommentsFragment extends Fragment {
 
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        mAuth.addAuthStateListener(mAuthListner);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (mAuthListner != null) {
-            mAuth.removeAuthStateListener(mAuthListner);
-        }
-    }
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        mAuth.addAuthStateListener(mAuthListner);
+//    }
+//
+//    @Override
+//    public void onStop() {
+//        super.onStop();
+//        if (mAuthListner != null) {
+//            mAuth.removeAuthStateListener(mAuthListner);
+//        }
+//    }
 }

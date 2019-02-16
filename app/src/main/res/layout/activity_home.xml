@@ -16,20 +16,26 @@
         <RelativeLayout
             android:id="@+id/relLayoyt1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="50dp">
 
-            <include layout="@layout/layout_top_tabs"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Main Feded"/>
+
+            <!--<include layout="@layout/layout_top_tabs"/>-->
 
         </RelativeLayout>
 
         <!--middle section (body)-->
         <RelativeLayout
-            android:id="@+id/relLayoyt2"
+            android:id="@+id/relLayout2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/relLayoyt1">
 
-        <include layout="@layout/layout_center_viewpager"/>
+        <include layout="@layout/fragment_home"/>
 
         </RelativeLayout>
 

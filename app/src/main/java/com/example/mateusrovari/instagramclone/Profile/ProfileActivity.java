@@ -12,7 +12,6 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.mateusrovari.instagramclone.R;
-import com.example.mateusrovari.instagramclone.Utils.ViewCommentsFragment;
 import com.example.mateusrovari.instagramclone.Utils.ViewPostFragment;
 import com.example.mateusrovari.instagramclone.Utils.ViewProfileFragment;
 import com.example.mateusrovari.instagramclone.models.Photo;
@@ -92,14 +91,14 @@ public class ProfileActivity extends AppCompatActivity implements ProfileFragmen
     public void onCommentThreadSelectedListner(Photo photo) {
         Log.d(TAG, "onCommentThreadSelectedListner: selected a comment thread");
 
-        ViewCommentsFragment fragment = new ViewCommentsFragment();
-        Bundle args = new Bundle();
-        args.putParcelable(getString(R.string.photo), photo);
-        fragment.setArguments(args);
-
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.container, fragment);
-        transaction.addToBackStack(getString(R.string.view_comments_fragment));
-        transaction.commit();
+//        ViewCommentsActivity fragment = new ViewCommentsActivity();
+//        Bundle args = new Bundle();
+//        args.putParcelable(getString(R.string.photo), photo);
+//        fragment.setArguments(args);
+//
+//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//        transaction.replace(R.id.container, fragment);
+//        transaction.addToBackStack(getString(R.string.view_comments_fragment));
+//        transaction.commit();
     }
 }
